@@ -1,0 +1,137 @@
+#container {
+    grid-row-gap: 3px;
+    grid-column-gap: 3px;
+    width: 350px;
+    display: grid;
+    grid-template-rows: repeat(2,minmax(50px, auto)) repeat(5,50px);
+    grid-template-columns: repeat(4, 80px);
+    grid-template-areas: "output output output output"
+                         "input input input input"
+                         "ac ac del div"
+                         "seven eight nine times"
+                         "four five six minus"
+                         "one two three add"
+                         "zero dot equal equal";
+    background-color: rgb(63, 53, 53);
+    justify-content: center;
+    align-content: center;
+    margin: 2em auto;
+    padding-bottom: 1em;
+
+}
+.key{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    background-color: rgb(78, 206, 206);
+    border: 0;
+    font-family: 'Orbitron', sans-serif;
+}
+
+
+
+.key:hover{
+    background-color: rgb(22, 121, 121);
+    color: #FFF;
+}
+.key:focus{
+    background-color: rgb(22, 121, 121);
+}
+.output{
+    grid-area: output;
+    color:  rgb(78, 206, 206);
+    font-size: 1.2rem;
+    border-bottom: 1px solid ;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    word-break: break-all;
+    text-align: right;
+    padding: .5em 0;
+    font-family: 'Orbitron', sans-serif;
+}
+
+
+
+.input {
+    grid-area: input;
+    color: rgb(11, 162, 182);
+    text-align: right;
+    font-family: 'Orbitron', sans-serif;
+    word-break: break-all;
+}
+
+.one {
+    grid-area: one;
+}
+.two {
+    grid-area: two;
+}
+.three {
+    grid-area: three;
+}
+.four {
+    grid-area: four;
+}
+.five {
+    grid-area: five;
+}
+.six {
+    grid-area: six;
+}
+.seven {
+    grid-area: seven;
+}
+
+.eight {
+    grid-area: eight;
+}
+.nine {
+    grid-area: nine;
+}
+.zero {
+    grid-area: zero;
+}
+.dot {
+    grid-area: dot;
+}
+
+.ac {
+    grid-area: ac;
+    background-color: rgb(212, 75, 75);
+}
+.ac:hover{
+    background-color: rgb(145, 31, 51);
+}
+.ac:focus{
+
+    background-color: rgb(145, 31, 51);
+}
+.del {
+    grid-area: del;
+}
+
+.times {
+    grid-area: times;
+}
+.add {
+    grid-area: add;
+}
+.div {
+    grid-area: div;
+}
+.equal {
+    grid-area: equal;
+}
+.minus {
+    grid-area: minus;
+}
+
+.overlimit{
+    font-variant-caps: small-caps;
+    font-size: 1.5rem;
+    color: rgb(204, 73, 73);
+    font-weight: bold;
+}
+
