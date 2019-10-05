@@ -3,7 +3,7 @@ import '../myStyle.css';
 import Button from './button';
 import Input from './input';
 import Output from './output';
-import { isOverLimit, isResult, getLast, isOperator, containNumber, appendOperator } from '../utils';
+import { isOverLimit, isResult, getLast, isOperator, containNumber, appendOperator, formatOperation, formatResult } from '../utils';
 
 class Container extends Component {
     state = { 
@@ -44,14 +44,12 @@ class Container extends Component {
           ({ output } = this.clearClick())
         }
         let {start, last} = getLast(output);
-        console.log('start',start,'last',last)
     
         if (last === '0' || !last) {
           output = start+num;
           input = num;
         }
         else if (isOperator(last)){
-          console.log("NUMBER CLICK: last in operator")
             output = output + num;
             input = num;
         }
@@ -118,6 +116,22 @@ class Container extends Component {
         return {input, output}
       }
 
+      // Executes the operation and displays the result.
+      equalClick = (input, output) => {
+        if (!isResult(output)) {
+          const findAllX = /x/g;
+          let formattedOutput = formatOperation(output);
+          let result = eval(formattedOutput.replace(findAllX, '*'));
+          let formattedResult = formatResult(result.toString());
+          output = formattedOutput + ' = ' + formattedResult;
+          // if the result is not finite, we don't want to use it any more
+          // so we set input to 0 to avoid it being taken as an operand for 
+          // another operation.
+          input = (isFinite(result)) ? formattedResult : '0';
+        }
+        return {input, output}
+      }
+
       // We are using this function to change the state of the component
       update = ({input, output}) => {
         this.setState({
@@ -138,6 +152,9 @@ class Container extends Component {
         }
         else if (value === '.'){
           this.update(this.dotClick(input,output));
+        }
+        else if (value === '='){
+          this.update(this.equalClick(input, output))
         }
           
       }

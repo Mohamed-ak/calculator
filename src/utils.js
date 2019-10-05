@@ -42,26 +42,51 @@ export const getLast = (operation) => {
     return {last: '', start: operation}
     
   }
-  // This function appends an operator to a string. If the operator is minus(-)
-  // and the string ends with another operator than minus, we append the operator to 
-  // the string (ex: string+-, string/-). Otherwise if the string ends with minus
-  // and the operator is not minus, we replace the end with the new operator 
-  //(ex: if op = +, string/- is replaced by string+ ) but if the operator is minus, we do
-  // nothing ( if op = - , string+- does not change).
-  export const appendOperator = (value, op) => {
-    const endsWithOperator = /(\+|-|x|\/)+$/;
-    if (endsWithOperator.test(value)){
-      let match = value.match(endsWithOperator);
-      if (match[1] !== '-'){
-        if (op === '-') return value + op
-        else return value.slice(0, match.index) + op;
-      }
-      else{
-        return (op === '-') ? value : value.slice(0, match.index) + op;
-      }
+// This function appends an operator to a string. If the operator is minus(-)
+// and the string ends with another operator than minus, we append the operator to 
+// the string (ex: string+-, string/-). Otherwise if the string ends with minus
+// and the operator is not minus, we replace the end with the new operator 
+//(ex: if op = +, string/- is replaced by string+ ) but if the operator is minus, we do
+// nothing ( if op = - , string+- does not change).
+export const appendOperator = (value, op) => {
+  const endsWithOperator = /(\+|-|x|\/)+$/;
+  if (endsWithOperator.test(value)){
+    let match = value.match(endsWithOperator);
+    if (match[1] !== '-'){
+      if (op === '-') return value + op
+      else return value.slice(0, match.index) + op;
     }
     else{
-      return value + op;
+      return (op === '-') ? value : value.slice(0, match.index) + op;
     }
+  }
+  else{
+    return value + op;
+  }
+}
+
+// Formats the result by removing any useless zeros from the decimal part
+// and make sure the decimal part is less than or equal to ten digits.
+export const formatResult = (result) => {
+  const findZerosAtEnd = /(\d+)(\.\d*[1-9])0+$/;
+  return result.replace(findZerosAtEnd, (_,int,dec)=>{
+    dec = (dec.length > 10) ? dec.slice(0,10) : dec;
+    return int + dec;
+  });
+  }
+
+
+// Formats the operation by removing any useless operators from the end.
+export const formatOperation = (operation) => {
+  let formatted = (isOperator(operation) || isResult(operation)) ? undefined : operation;
+      if (formatted){
+          let {last, start} = getLast(operation)
+          if (isOperator(last)){
+          formatted = start;
+          
+          console.log('F1',formatted)
+        }
+    }
+    return formatted;
   }
 
