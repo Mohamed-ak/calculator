@@ -86,6 +86,38 @@ class Container extends Component {
         return {input, output}
       }
 
+      // Handles click on dot for the decimal part.
+      dotClick = (input, output) => {
+        if(isOverLimit(input)){
+          setTimeout(()=>{
+            this.update({input, output})
+          }, 1000);
+          return {input:<span className="overlimit">digit limit met</span>, output}
+        }
+        if (isResult(output)){
+          output = input;
+        }
+        // If the input is an operator, we append 0.
+        if (isOperator(input) || !output){
+          input = '0.'
+          output += input;
+        }
+        // Otherwise we make sure the num does not have a decimal part or an exponent
+        // before appending a dot to it.
+        else{
+          let {start, last} = getLast(output);
+          const containE = /e/;
+          const containDot = /.*\..*/;
+          if (!containE.test(last) && !containDot.test(last)){
+            input = last + '.'
+            output =  start + input;
+            
+        }
+        }
+    
+        return {input, output}
+      }
+
       // We are using this function to change the state of the component
       update = ({input, output}) => {
         this.setState({
@@ -103,6 +135,9 @@ class Container extends Component {
         }
         else if (isOperator(value)){
           this.update(this.operatorClick(value,input, output));
+        }
+        else if (value === '.'){
+          this.update(this.dotClick(input,output));
         }
           
       }
