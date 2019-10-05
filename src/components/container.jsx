@@ -132,6 +132,11 @@ class Container extends Component {
         return {input, output}
       }
 
+      // Resets to the initial values.
+      clearClick = () => {
+        return {input: '0', output: ''}
+      }
+
       // We are using this function to change the state of the component
       update = ({input, output}) => {
         this.setState({
@@ -155,6 +160,9 @@ class Container extends Component {
         }
         else if (value === '='){
           this.update(this.equalClick(input, output))
+        }
+        else if (value === 'ac'){
+          this.update(this.clearClick())
         }
           
       }
