@@ -3,7 +3,7 @@ import '../myStyle.css';
 import Button from './button';
 import Input from './input';
 import Output from './output';
-import { isOverLimit, isResult, getLast, isOperator, containNumber } from '../utils';
+import { isOverLimit, isResult, getLast, isOperator, containNumber, appendOperator } from '../utils';
 
 class Container extends Component {
     state = { 
@@ -62,6 +62,29 @@ class Container extends Component {
         
         return {input, output}
       }
+      // Handles click on an operator (+, -, / or x)
+      operatorClick = (op, input, output) => {
+        if (isResult(output)){
+          output = input;
+        }
+        let {last} = getLast(output); 
+          // If this this operator starts the first operand, 
+          // we make sure it can only be minus
+          if (last === ''){
+              if (op === '-'){
+                output = op;
+              }
+          }
+          // Otherwise we append it to the operation
+          else{
+            if (!(isOperator(last) && last === output)){
+              output = appendOperator(output, op);
+            }
+            
+          }
+        input = op;
+        return {input, output}
+      }
 
       // We are using this function to change the state of the component
       update = ({input, output}) => {
@@ -77,6 +100,9 @@ class Container extends Component {
         if (typeof input === 'object') return
         if (containNumber(value)){
           this.update(this.numberClick(value, input, output))
+        }
+        else if (isOperator(value)){
+          this.update(this.operatorClick(value,input, output));
         }
           
       }
