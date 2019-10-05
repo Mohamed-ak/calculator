@@ -136,6 +136,30 @@ class Container extends Component {
       clearClick = () => {
         return {input: '0', output: ''}
       }
+      // Allows us to remove the last character. 
+      deleteClick = (input, output) => {
+        let {last, start} = getLast(output);
+        // If there is a result displayed, we get the part before =
+        if (isResult(output)){
+          output = start;
+        }
+        else{
+          const endsWithE = /(.*)(e.\d)$/;
+          // We don't want to have something like 1e+ at the end
+          // so the 'e' goes away with last digit after the '+'.
+          if (endsWithE.test(last)){
+            output = start + last.replace(endsWithE, (_,withoutE)=>withoutE);
+          }
+          else if(!last && isOperator(start)){
+            output = '';
+          }
+          else{
+            output = start + last.slice(0, last.length - 1);
+          }
+        }
+        input = (getLast(output).last ) ? getLast(output).last : this.clearClick().input;
+        return {output, input}
+      }
 
       // We are using this function to change the state of the component
       update = ({input, output}) => {
@@ -163,6 +187,9 @@ class Container extends Component {
         }
         else if (value === 'ac'){
           this.update(this.clearClick())
+        }
+        else if (value === 'del'){
+          this.update(this.deleteClick(input, output))
         }
           
       }

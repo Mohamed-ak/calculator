@@ -84,7 +84,6 @@ export const formatOperation = (operation) => {
           if (isOperator(last)){
           formatted = start;
           
-          console.log('F1',formatted)
         }
     }
     return formatted;
