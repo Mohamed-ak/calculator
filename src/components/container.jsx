@@ -3,6 +3,7 @@ import '../myStyle.css';
 import Button from './button';
 import Input from './input';
 import Output from './output';
+import { isOverLimit, isResult, getLast, isOperator, containNumber } from '../utils';
 
 class Container extends Component {
     state = { 
@@ -29,7 +30,54 @@ class Container extends Component {
         {name: "dot", value: '.', display: '.'},
         {name: "equal", value: '=', display: '='},
       ];
+
+      // This is used to handle the numbers.
+      numberClick = (num, input, output) => {
+ 
+        if(isOverLimit(input)){
+          setTimeout(()=>{
+            this.update({input, output})
+          }, 1000);
+          return {input:<span className="overlimit">digit limit met</span>, output}
+        }
+        if (isResult(output)){
+          ({ output } = this.clearClick())
+        }
+        let {start, last} = getLast(output);
+        console.log('start',start,'last',last)
+    
+        if (last === '0' || !last) {
+          output = start+num;
+          input = num;
+        }
+        else if (isOperator(last)){
+          console.log("NUMBER CLICK: last in operator")
+            output = output + num;
+            input = num;
+        }
+        else if (containNumber(last)){
+          output += num;
+          input += num;
+        }
+        
+        return {input, output}
+      }
+
+      // We are using this function to change the state of the component
+      update = ({input, output}) => {
+        this.setState({
+          input, output
+        })
+      }
+
       onClick = (value) =>{
+        let {input, output} = this.state;
+        // if input is an object, that means we've reached the number of caracters 
+        // allowed at once.
+        if (typeof input === 'object') return
+        if (containNumber(value)){
+          this.update(this.numberClick(value, input, output))
+        }
           
       }
     render() { 
