@@ -1,8 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import WebFont from 'webfontloader';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+// Loads Orbitron font
+WebFont.load({
+    google: {
+        families: ['Orbitron', 'sans-serif']
+    }
+});
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
